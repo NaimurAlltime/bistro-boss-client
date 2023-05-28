@@ -1,30 +1,13 @@
+import { Link } from "react-router-dom";
+
 const Navbar = () => {
   const navItems = (
     <>
       <li>
-        <a>Item 1</a>
+        <Link to="/">Home</Link>
       </li>
-      <li tabIndex={0}>
-        <a className="justify-between">
-          Parent
-          <svg
-            className="fill-current"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-          >
-            <path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" />
-          </svg>
-        </a>
-        <ul className="p-2">
-          <li>
-            <a>Submenu 1</a>
-          </li>
-          <li>
-            <a>Submenu 2</a>
-          </li>
-        </ul>
+      <li>
+        <Link to="/menu">Our menu</Link>
       </li>
       <li>
         <a>Item 3</a>
@@ -59,9 +42,12 @@ const Navbar = () => {
               {navItems}
             </ul>
           </div>
-          <a className="btn btn-ghost normal-case text-2xl font-semibold">
+          <Link
+            to="/"
+            className="btn btn-ghost normal-case text-2xl font-semibold"
+          >
             Bistro Boss
-          </a>
+          </Link>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">{navItems}</ul>
