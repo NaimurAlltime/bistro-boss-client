@@ -1,11 +1,15 @@
 import { useContext } from "react";
+import { FaShoppingCart } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { Tooltip } from "react-tooltip";
 import Swal from "sweetalert2";
+import useCart from "../../../hooks/useCart";
 import { AuthContext } from "../../../providers/AuthProvider";
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
+  const [cart] = useCart();
+  // console.log(cart);
 
   const handleLogOut = () => {
     logOut()
@@ -30,6 +34,21 @@ const Navbar = () => {
       </li>
       <li>
         <Link to="/secret">Secret</Link>
+      </li>
+      <li>
+        <Link to="/dashboard/my-cart">
+          <button
+            type="button"
+            className="relative inline-flex items-center p-3 text-sm font-medium text-center text-white"
+          >
+            <FaShoppingCart className="text-2xl w-6 h-6" />
+
+            <span className="sr-only">Notifications</span>
+            <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -right-2 dark:border-gray-900">
+              +{cart?.length || 0}
+            </div>
+          </button>
+        </Link>
       </li>
     </>
   );
