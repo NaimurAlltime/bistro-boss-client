@@ -1,62 +1,56 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  LoadCanvasTemplate,
-  loadCaptchaEnginge,
-  validateCaptcha,
-} from "react-simple-captcha";
 import Swal from "sweetalert2";
 import authImg from "../../assets/others/authentication2.png";
 import { AuthContext } from "../../providers/AuthProvider";
 
-const Login = () => {
+const SignUp = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const { createUser, googleSignIn, updateUserProfile, logOut } =
+    useContext(AuthContext);
   const navigate = useNavigate();
-  // const location = useLocation();
-  // const from = location.state?.from?.pathname || "/";
 
-  const { signInUser, googleSignIn } = useContext(AuthContext);
-
-  const [disabled, setDisabled] = useState(true);
-
-  useEffect(() => {
-    loadCaptchaEnginge(6);
-  }, []);
-
-  const handleCaptchaValidate = (e) => {
-    const user_captcha_value = e.target.value;
-    if (validateCaptcha(user_captcha_value)) {
-      setDisabled(false);
-    } else {
-      setDisabled(true);
-    }
-  };
-
-  const handleLogin = (event) => {
+  const handleSignUp = (event) => {
     event.preventDefault();
 
     setError("");
     setSuccess("");
 
     const form = event.target;
+    const name = form.name.value;
+    // const photo = form.photo.value;
     const email = form.email.value;
     const password = form.password.value;
-    // console.log(email, password);
+    // console.log(name, photo, email, password);
 
-    // sign in user
-    signInUser(email, password)
+    // password validation
+    if (password.length < 6) {
+      setError("Please add at least 6 characters in your password");
+      return;
+    }
+
+    // create User With Email And Password
+    createUser(email, password)
       .then((result) => {
         const loggedUser = result.user;
         console.log(loggedUser);
+        setSuccess("User has been created successful!");
+        // window.location.reload(true);
+        //   update user profile
+        Swal.fire(
+          "Good job!",
+          "Sign Up Successful!. Please Login and get started",
+          "success"
+        );
+        navigate("/login");
+        logOut();
+        updateUserProfile(loggedUser, name);
         setError("");
         form.reset();
-        setSuccess("User Login Successful!");
-        Swal.fire("Good job!", "User Login Successful!", "success");
-        // navigate(from, { replace: true });
-        navigate("/");
       })
       .catch((error) => {
         console.log(error.message);
@@ -72,9 +66,8 @@ const Login = () => {
         console.log(loggedUser);
         setError("");
         setSuccess("Google Sign In Successful!");
-        Swal.fire("Good job!", "Google Sign In Successful!", "success");
         navigate("/");
-        // navigate(from, { replace: true });
+        Swal.fire("Good job!", "Google Sign In Successful!", "success");
       })
       .catch((error) => {
         console.log(error.message);
@@ -83,16 +76,31 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <>
+      <Helmet>
+        <title>Bistro Boss | Sign Up</title>
+      </Helmet>
       <div className="hero min-h-screen bg-base-200">
-        <div className="hero-content flex-col lg:flex-row">
+        <div className="hero-content flex-col lg:flex-row-reverse">
           <div className="w-1/2 mr-14">
             <img src={authImg} alt="" />
           </div>
           <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100 ">
             <div className="card-body">
-              <h1 className="text-2xl text-center font-bold">Login</h1>
-              <form onSubmit={handleLogin}>
+              <h1 className="text-3xl text-center font-bold">Sign Up</h1>
+              <form onSubmit={handleSignUp}>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Name</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="name"
+                    name="name"
+                    id="name"
+                    className="input input-bordered"
+                  />
+                </div>
                 <div className="form-control">
                   <label className="label">
                     <span className="label-text">Email</span>
@@ -124,34 +132,20 @@ const Login = () => {
                     </a>
                   </label>
                 </div>
-                <div className="form-control">
-                  <label className="label">
-                    <LoadCanvasTemplate />
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="type the captcha above"
-                    name="captcha"
-                    id="captcha"
-                    onBlur={handleCaptchaValidate}
-                    className="input input-bordered"
-                  />
-                </div>
-                <div className="form-control mt-6">
+                <div className="form-control mt-5">
                   <input
                     className="btn border-0 bg-[#D1A054]"
                     type="submit"
-                    value="Login"
-                    disabled={disabled}
+                    value="Sign Up"
                   />
                 </div>
               </form>
               <p className="text-center text-red-400">{error}</p>
               <p className="text-center text-emerald-400">{success}</p>
-              <p className="my-4 text-center">
-                New to Toy Trackers?{" "}
-                <Link className="text-[#D1A054] font-bold" to="/sign-up">
-                  SignUp
+              <p className="my-3 text-center">
+                Already have an account?{" "}
+                <Link className="text-[#D1A054] font-bold mb-0" to="/login">
+                  Login
                 </Link>
               </p>
               <div className="divider mt-0">OR</div>
@@ -173,8 +167,8 @@ const Login = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
-export default Login;
+export default SignUp;
