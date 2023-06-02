@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   LoadCanvasTemplate,
   loadCaptchaEnginge,
@@ -15,8 +15,8 @@ const Login = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
-  // const location = useLocation();
-  // const from = location.state?.from?.pathname || "/";
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
   const { signInUser, googleSignIn } = useContext(AuthContext);
 
@@ -55,8 +55,7 @@ const Login = () => {
         form.reset();
         setSuccess("User Login Successful!");
         Swal.fire("Good job!", "User Login Successful!", "success");
-        // navigate(from, { replace: true });
-        navigate("/");
+        navigate(from, { replace: true });
       })
       .catch((error) => {
         console.log(error.message);
@@ -73,8 +72,7 @@ const Login = () => {
         setError("");
         setSuccess("Google Sign In Successful!");
         Swal.fire("Good job!", "Google Sign In Successful!", "success");
-        navigate("/");
-        // navigate(from, { replace: true });
+        navigate(from, { replace: true });
       })
       .catch((error) => {
         console.log(error.message);

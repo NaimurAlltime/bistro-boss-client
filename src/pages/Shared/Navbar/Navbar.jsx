@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { Tooltip } from "react-tooltip";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../../providers/AuthProvider";
 
@@ -26,6 +27,9 @@ const Navbar = () => {
       </li>
       <li>
         <Link to="/order">Order Food</Link>
+      </li>
+      <li>
+        <Link to="/secret">Secret</Link>
       </li>
     </>
   );
@@ -70,16 +74,25 @@ const Navbar = () => {
         <div className="navbar-end">
           {user ? (
             <>
-              <button onClick={handleLogOut} className="btn">
-                logOut
+              <img
+                data-tooltip-id="user-name"
+                data-tooltip-content={user.displayName}
+                style={{ width: "56px", height: "53px" }}
+                src={user.photoURL}
+                className="mr-3 rounded-full"
+              />
+              <Tooltip id="user-name" />
+              <button
+                onClick={handleLogOut}
+                className="btn btn-outline btn-secondary"
+              >
+                Log Out
               </button>
             </>
           ) : (
-            <>
-              <Link to="/login">
-                <button className="btn">Login</button>
-              </Link>
-            </>
+            <Link to="/login">
+              <button className="btn btn-outline btn-secondary">Login</button>
+            </Link>
           )}
         </div>
       </div>

@@ -22,7 +22,7 @@ const SignUp = () => {
 
     const form = event.target;
     const name = form.name.value;
-    // const photo = form.photo.value;
+    const photo = form.photo.value;
     const email = form.email.value;
     const password = form.password.value;
     // console.log(name, photo, email, password);
@@ -39,16 +39,16 @@ const SignUp = () => {
         const loggedUser = result.user;
         console.log(loggedUser);
         setSuccess("User has been created successful!");
-        // window.location.reload(true);
-        //   update user profile
+
         Swal.fire(
           "Good job!",
-          "Sign Up Successful!. Please Login and get started",
+          "User Created Successful!. Please Login and get started",
           "success"
         );
         navigate("/login");
         logOut();
-        updateUserProfile(loggedUser, name);
+        //   update user profile
+        updateUserProfile(loggedUser, name, photo);
         setError("");
         form.reset();
       })
@@ -98,6 +98,18 @@ const SignUp = () => {
                     placeholder="name"
                     name="name"
                     id="name"
+                    className="input input-bordered"
+                  />
+                </div>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Photo URL</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="photo url"
+                    name="photo"
+                    id="photo"
                     className="input input-bordered"
                   />
                 </div>
