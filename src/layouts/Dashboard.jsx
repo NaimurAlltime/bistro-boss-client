@@ -8,8 +8,10 @@ import { FiMenu } from "react-icons/fi";
 import { MdAddCard } from "react-icons/md";
 
 import { NavLink, Outlet } from "react-router-dom";
+import useCart from "./../hooks/useCart";
 
 const Dashboard = () => {
+  const [cart] = useCart();
   return (
     <div className="drawer drawer-mobile ">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
@@ -46,6 +48,9 @@ const Dashboard = () => {
             <NavLink to="/dashboard/my-cart">
               {" "}
               <FaShoppingCart /> My Cart
+              <span className="badge inl badge-secondary -mt-2">
+                +{cart?.length || 0}
+              </span>
             </NavLink>
           </li>
 
