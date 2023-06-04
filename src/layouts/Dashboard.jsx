@@ -11,12 +11,14 @@ import { FiMenu } from "react-icons/fi";
 import { ImSpoonKnife } from "react-icons/im";
 import { MdAddCard } from "react-icons/md";
 import { NavLink, Outlet } from "react-router-dom";
+import useAdmin from "./../hooks/useAdmin";
 import useCart from "./../hooks/useCart";
 
 const Dashboard = () => {
   const [cart] = useCart();
   // TODO: isAdmin dynamically get database
-  const isAdmin = true;
+  // const isAdmin = true;
+  const [isAdmin] = useAdmin();
   return (
     <div className="drawer drawer-mobile ">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
