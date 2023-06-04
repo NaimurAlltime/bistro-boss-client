@@ -1,17 +1,22 @@
 import {
+  FaBookMedical,
   FaCalendarAlt,
   FaHome,
+  FaListUl,
   FaShoppingCart,
+  FaUsers,
   FaWallet,
 } from "react-icons/fa";
 import { FiMenu } from "react-icons/fi";
+import { ImSpoonKnife } from "react-icons/im";
 import { MdAddCard } from "react-icons/md";
-
 import { NavLink, Outlet } from "react-router-dom";
 import useCart from "./../hooks/useCart";
 
 const Dashboard = () => {
   const [cart] = useCart();
+  // TODO: isAdmin dynamically get database
+  const isAdmin = true;
   return (
     <div className="drawer drawer-mobile ">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
@@ -29,30 +34,63 @@ const Dashboard = () => {
         <ul className="menu p-4 w-80 mt-10 text-lg uppercase">
           <li className="text-4xl text-center font-bold">BISTRO BOSS</li>
           <li className="text-2xl text-center font-semibold">Restaurant</li>
-          <li className="mt-10">
-            <NavLink to="/dashboard/user-home">
-              <FaHome /> User Home
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/dashboard/reservation">
-              <FaCalendarAlt /> reservation
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/dashboard/payment-history">
-              <FaWallet /> payment history
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/dashboard/my-cart">
-              {" "}
-              <FaShoppingCart /> My Cart
-              <span className="badge inl badge-secondary -mt-2">
-                +{cart?.length || 0}
-              </span>
-            </NavLink>
-          </li>
+
+          {isAdmin ? (
+            <>
+              <li className="mt-10">
+                <NavLink to="/dashboard/user-home">
+                  <FaHome /> Admin Home
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/dashboard/add-items">
+                  <ImSpoonKnife /> add items
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/dashboard/payment-history">
+                  <FaListUl /> payment history
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/dashboard/manage-bookings">
+                  <FaBookMedical /> manage bookings
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/dashboard/all-users">
+                  <FaUsers /> all users
+                </NavLink>
+              </li>
+            </>
+          ) : (
+            <>
+              <li className="mt-10">
+                <NavLink to="/dashboard/user-home">
+                  <FaHome /> User Home
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/dashboard/reservation">
+                  <FaCalendarAlt /> reservation
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/dashboard/payment-history">
+                  <FaWallet /> payment history
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/dashboard/my-cart">
+                  {" "}
+                  <FaShoppingCart /> My Cart
+                  <span className="badge inl badge-secondary -mt-2">
+                    +{cart?.length || 0}
+                  </span>
+                </NavLink>
+              </li>
+            </>
+          )}
 
           <div className="divider"></div>
           <li>

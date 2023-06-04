@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import authImg from "../../assets/others/authentication2.png";
 import { AuthContext } from "../../providers/AuthProvider";
@@ -10,6 +10,8 @@ import { AuthContext } from "../../providers/AuthProvider";
 const SignUp = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
   const { createUser, googleSignIn, updateUserProfile, logOut } =
     useContext(AuthContext);
   const navigate = useNavigate();
@@ -38,19 +40,31 @@ const SignUp = () => {
       .then((result) => {
         const loggedUser = result.user;
         console.log(loggedUser);
-        setSuccess("User has been created successful!");
-
-        Swal.fire(
-          "Good job!",
-          "User Created Successful!. Please Login and get started",
-          "success"
-        );
-        navigate("/login");
-        logOut();
         //   update user profile
         updateUserProfile(loggedUser, name, photo);
-        setError("");
-        form.reset();
+        const saveUser = { name: name, email: email };
+
+        // store user data in database
+        fetch("http://localhost:5000/users", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(saveUser),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.insertedId) {
+              Swal.fire(
+                "Good job!",
+                "User Created Successful!. Please Login and get started",
+                "success"
+              );
+              logOut();
+              navigate("/login");
+              form.reset();
+            }
+          });
       })
       .catch((error) => {
         console.log(error.message);
@@ -64,10 +78,23 @@ const SignUp = () => {
       .then((result) => {
         const loggedUser = result.user;
         console.log(loggedUser);
-        setError("");
-        setSuccess("Google Sign In Successful!");
-        navigate("/");
         Swal.fire("Good job!", "Google Sign In Successful!", "success");
+        // store user data in database
+        const saveUser = {
+          name: loggedUser.displayName,
+          email: loggedUser.email,
+        };
+        fetch("http://localhost:5000/users", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(saveUser),
+        })
+          .then((res) => res.json())
+          .then(() => {
+            navigate(from, { replace: true });
+          });
       })
       .catch((error) => {
         console.log(error.message);
