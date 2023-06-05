@@ -22,14 +22,14 @@ const Dashboard = () => {
   return (
     <div className="drawer drawer-mobile ">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content flex flex-col items-center justify-center">
-        <Outlet></Outlet>
+      <div className="drawer-content">
         <label
           htmlFor="my-drawer-2"
           className="btn btn-primary drawer-button lg:hidden"
         >
           Open drawer
         </label>
+        <Outlet></Outlet>
       </div>
       <div className="drawer-side text-base-content bg-[#D1A054]">
         <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
@@ -45,13 +45,13 @@ const Dashboard = () => {
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/dashboard/add-items">
+                <NavLink to="/dashboard/add-item">
                   <ImSpoonKnife /> add items
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/dashboard/payment-history">
-                  <FaListUl /> payment history
+                <NavLink to="/dashboard/manage-items">
+                  <FaListUl /> Manage Items
                 </NavLink>
               </li>
               <li>
