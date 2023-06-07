@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import useCart from "./../../../hooks/useCart";
 
@@ -42,7 +43,9 @@ const MyCart = () => {
       <div className="uppercase font-semibold flex h-[65px] justify-evenly items-center">
         <h3 className="text-3xl">Total Orders: {cart.length} </h3>
         <h3 className="text-3xl">Total Price: ${totalPrice.toFixed(2)} </h3>
-        <button className="btn btn-warning btn-sm">pay</button>
+        <Link to="/dashboard/payment">
+          <button className="btn btn-warning btn-sm">pay</button>
+        </Link>
       </div>
       <div className="overflow-x-auto">
         <table className="table w-full md:w-[892px] md:ml-14">
