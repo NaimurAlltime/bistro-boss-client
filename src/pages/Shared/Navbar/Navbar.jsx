@@ -3,11 +3,13 @@ import { FaShoppingCart } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { Tooltip } from "react-tooltip";
 import Swal from "sweetalert2";
+import useAdmin from "../../../hooks/useAdmin";
 import useCart from "../../../hooks/useCart";
 import { AuthContext } from "../../../providers/AuthProvider";
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
+  const [isAdmin] = useAdmin();
   const [cart] = useCart();
   // console.log(cart);
 
@@ -32,9 +34,16 @@ const Navbar = () => {
       <li>
         <Link to="/order">Order Food</Link>
       </li>
-      <li>
-        <Link to="/secret">Secret</Link>
-      </li>
+
+      {isAdmin ? (
+        <li>
+          <Link to="/dashboard/admin-home">Dashboard</Link>
+        </li>
+      ) : (
+        <li>
+          <Link to="/dashboard/user-home">Dashboard</Link>
+        </li>
+      )}
       <li>
         <Link to="/dashboard/my-cart">
           <button
